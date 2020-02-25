@@ -77,13 +77,13 @@ while afterTime > endTime: #while there are still other posts to go through, kee
 		#7 Get the URL, get the API response, and change it into JSON
 		responseComments = curlCall(commentURL)
 
-		#7 Parse each API call into a dataframe
+		#8 Parse each API call into a dataframe
 		commentsDF = parsePosts(responseComments)
 
-		#8 add the comments df into the comments file
+		#9 add the comments df into the comments file
 		appendposts(commentsDF,commentsFile)
 
-	#get the new time
+	#10 get the new time
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
