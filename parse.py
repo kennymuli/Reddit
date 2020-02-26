@@ -29,8 +29,14 @@ def postsURL(subreddit, afterTime, beforeTime, responseSize): #Create the URL
 	return(urlBase+appendSubreddit+appendSort+appendAfterTime+appendBeforeTime+size)
 
 def curlCall(url): #Get the cURL response from a URL
-	response = r.get(url)
-	return(response.json())
+	x = False
+	while x = False:
+		try:
+			response = r.get(url)
+			return(response.json())
+			x = True
+		except:
+			t.sleep(60)
 
 def parsePosts(response): #set up the data in a Pandas Data Frame
 	return(pd.DataFrame(response['data']))
