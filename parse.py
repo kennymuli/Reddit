@@ -39,24 +39,21 @@ def appendPosts(data,file): #saving the posts data frames
 	if os.path.exists(file):
 		OGFile = pd.read_pickle(file,compression=None)
 		OGFile.append(data)
-		print("file exists")
 	else:
 		data.to_pickle(file)
-		print("creating file")
 
 def commentsURL(post_id,responseSize): #Get the comments from the posts
 	urlBase = "https://api.pushshift.io/reddit/comment/search/"
-	appendPostID = "?link_id=" + post_id
+	appendPostID = "?id=" + post_id
 	responseSize = "&limit=" + str((responseSize*200))
 	return(urlBase + appendPostID + responseSize)
 
 def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	return(postsDataframe['created_utc'].min())
 
-while afterTime > endTime: #while there are still other posts to go through, keep going
+while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	#1 run postURL to get the pushshift list of URLs
 	postURL = postsURL(subreddit,afterTime,beforeTime,responseSize)
-	print(postURL)
 
 	#2 get the URL, get the API response, and change it into a JSON
 	responsePosts = curlCall(postURL)
@@ -87,7 +84,7 @@ while afterTime > endTime: #while there are still other posts to go through, kee
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
-	print("Finished up to UTC " + beforeTime)
+	print(beforeTime, "finished.", str(endTime))
 
 #MEASUREMENT: TOtal no-OP responses vs total OP responses, for response rate (number of questions responded to)
 
