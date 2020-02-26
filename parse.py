@@ -10,7 +10,7 @@ unixtime = time.mktime(currentTime.timetuple()) #Convert current time to Unix fo
 #hardcode variables
 subreddit ="ama"
 time = int(unixtime)
-beforeTime = str(time)
+beforeTime = str(time - 5*(24*60*60)) #start it 5 days prior so new posts aren't caught up
 length = 7 #in days
 afterTime = str(time - length*(24*60*60))
 endTime = 1252540800 #Unix Time for August 10, 2009 at 12:00AM, when the AMA subreddit was created
@@ -38,15 +38,14 @@ def parsePosts(response): #set up the data in a Pandas Data Frame
 def appendPosts(data,file): #saving the posts data frames
 	if os.path.exists(file):
 		OGFile = pd.read_pickle(file,compression=None)
-		OGFile.append(data)
-		print("Appending file")
-		print OGFile
+		newFile = OGFile.append(data)
+		print newFile
+		newFile.to_pickle(file)
 	else:
 		data.to_pickle(file)
-		print("Creating file")
 def commentsURL(post_id,responseSize): #Get the comments from the posts
 	urlBase = "https://api.pushshift.io/reddit/comment/search/"
-	appendPostID = "?id=" + post_id
+	appendPostID = "?link_id=" + post_id
 	responseSize = "&limit=" + str((responseSize*200))
 	return(urlBase + appendPostID + responseSize)
 
@@ -54,6 +53,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	return(postsDataframe['created_utc'].min())
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
+	print(afterTime, ":", beforeTime)
 	#1 run postURL to get the pushshift list of URLs
 	postURL = postsURL(subreddit,afterTime,beforeTime,responseSize)
 
@@ -69,7 +69,6 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 	#5 for each of the posts in the DF, get all of the comments
 	for postID in postsDF['id']:
 		post_id = postID
-		print post_id
 		commentURL = commentsURL(post_id,responseSize) #6 Create the URL for each pushshift comments API call
 		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
