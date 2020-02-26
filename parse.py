@@ -67,12 +67,12 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 
 	#5 for each of the posts in the DF, get all of the comments
 	for postID in postsDF['id']:
-		post_id = postID
-		commentURL = commentsURL(post_id,responseSize) #6 Create the URL for each pushshift comments API call
+		commentURL = commentsURL(postID,responseSize) #6 Create the URL for each pushshift comments API call
 		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
 		time.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
+		print(postID)
 
 	#10 get the new time
 	time = getNewUTC(commentsDF)
