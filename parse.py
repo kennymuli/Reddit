@@ -39,9 +39,10 @@ def appendPosts(data,file): #saving the posts data frames
 	if os.path.exists(file):
 		OGFile = pd.read_pickle(file,compression=None)
 		OGFile.append(data)
+		print("Appending file")
 	else:
 		data.to_pickle(file)
-
+		print("Creating file")
 def commentsURL(post_id,responseSize): #Get the comments from the posts
 	urlBase = "https://api.pushshift.io/reddit/comment/search/"
 	appendPostID = "?id=" + post_id
