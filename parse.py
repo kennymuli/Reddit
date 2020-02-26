@@ -72,12 +72,12 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
+		time.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
 
 	#10 get the new time
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
-	time.sleep(2) #sleep two seconds before the next call so that the rate limit on the API call isn't too much
 
 #MEASUREMENT: TOtal no-OP responses vs total OP responses, for response rate (number of questions responded to)
 
