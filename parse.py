@@ -30,7 +30,7 @@ def postsURL(subreddit, afterTime, beforeTime, responseSize): #Create the URL
 
 def curlCall(url): #Get the cURL response from a URL
 	x = False
-	while x = False:
+	while x == False:
 		try:
 			response = r.get(url)
 			return(response.json())
