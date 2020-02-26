@@ -39,7 +39,6 @@ def appendPosts(data,file): #saving the posts data frames
 	if os.path.exists(file):
 		OGFile = pd.read_pickle(file,compression=None)
 		newFile = OGFile.append(data)
-		print newFile
 		newFile.to_pickle(file)
 	else:
 		data.to_pickle(file)
@@ -53,7 +52,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	return(postsDataframe['created_utc'].min())
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
-	print(afterTime, ":", beforeTime)
+	print afterTime,":", beforeTime
 	#1 run postURL to get the pushshift list of URLs
 	postURL = postsURL(subreddit,afterTime,beforeTime,responseSize)
 
@@ -78,7 +77,6 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
-	print(beforeTime, "finished.", str(endTime))
 
 #MEASUREMENT: TOtal no-OP responses vs total OP responses, for response rate (number of questions responded to)
 
