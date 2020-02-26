@@ -77,6 +77,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 
 		#8 Parse each API call into a dataframe
 		commentsDF = parsePosts(responseComments)
+		print(commentsDF)
 
 		#9 add the comments df into the comments file
 		appendPosts(commentsDF,commentsFile)
