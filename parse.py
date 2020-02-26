@@ -49,7 +49,6 @@ def commentsURL(post_id,responseSize): #Get the comments from the posts
 	appendPostID = "?id=" + post_id
 	responseSize = "&limit=" + str((responseSize*200))
 	return(urlBase + appendPostID + responseSize)
-	print postID
 
 def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	return(postsDataframe['created_utc'].min())
@@ -70,19 +69,11 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 	#5 for each of the posts in the DF, get all of the comments
 	for postID in postsDF['id']:
 		post_id = postID
-
-		#6 Create the URL for each pushshift comments API call
-		commentURL = commentsURL(post_id,responseSize)
-
-		#7 Get the URL, get the API response, and change it into JSON
-		responseComments = curlCall(commentURL)
-
-		#8 Parse each API call into a dataframe
-		commentsDF = parsePosts(responseComments)
-		print(commentsDF)
-
-		#9 add the comments df into the comments file
-		appendPosts(commentsDF,commentsFile)
+		print post_id
+		commentURL = commentsURL(post_id,responseSize) #6 Create the URL for each pushshift comments API call
+		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
+		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
+		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
 
 	#10 get the new time
 	time = getNewUTC(commentsDF)
