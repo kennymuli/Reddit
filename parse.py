@@ -1,11 +1,11 @@
-import time
+import time as t
 import datetime
 import requests as r
 import pandas as pd
 import os.path
 
 currentTime = datetime.datetime.now() #Get the current time
-unixtime = time.mktime(currentTime.timetuple()) #Convert current time to Unix format
+unixtime = t.mktime(currentTime.timetuple()) #Convert current time to Unix format
 
 #hardcode variables
 subreddit ="ama"
@@ -71,7 +71,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
-		time.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
+		t.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
 		print(postID)
 
 	#10 get the new time
