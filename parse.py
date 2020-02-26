@@ -40,6 +40,7 @@ def appendPosts(data,file): #saving the posts data frames
 		OGFile = pd.read_pickle(file,compression=None)
 		OGFile.append(data)
 		print("Appending file")
+		print OGFile
 	else:
 		data.to_pickle(file)
 		print("Creating file")
@@ -48,6 +49,7 @@ def commentsURL(post_id,responseSize): #Get the comments from the posts
 	appendPostID = "?id=" + post_id
 	responseSize = "&limit=" + str((responseSize*200))
 	return(urlBase + appendPostID + responseSize)
+	print postID
 
 def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	return(postsDataframe['created_utc'].min())
