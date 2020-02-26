@@ -36,6 +36,7 @@ def curlCall(url): #Get the cURL response from a URL
 			return(response.json())
 			x = True
 		except:
+			print("Error: Connectivity")
 			t.sleep(60)
 
 def parsePosts(response): #set up the data in a Pandas Data Frame
