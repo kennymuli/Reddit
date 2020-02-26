@@ -77,6 +77,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
+	time.sleep(2) #sleep two seconds before the next call so that the rate limit on the API call isn't too much
 
 #MEASUREMENT: TOtal no-OP responses vs total OP responses, for response rate (number of questions responded to)
 
