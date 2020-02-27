@@ -62,7 +62,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 		try:
 			return(postsDataframe['created_utc'].min())
 		except Exception:
-    		traceback.print_exc()
+			traceback.print_exc()
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	print afterTime,":", beforeTime
