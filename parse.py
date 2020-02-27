@@ -60,6 +60,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	while x == False:
 		try:
 			result = postsDataframe['created_utc'].min()
+			print result
 			x = True
 			return(result)
 		except:
@@ -89,7 +90,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		print(postID)
 
 	#10 get the new time
-	time = getNewUTC(commentsDF)
+	time = getNewUTC(pd.read_pickle('./comments.pk'))
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
 
