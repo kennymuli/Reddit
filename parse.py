@@ -33,8 +33,8 @@ def curlCall(url): #Get the cURL response from a URL
 	while x == False:
 		try:
 			response = r.get(url)
-			return(response.json())
 			x = True
+			return(response.json())
 		except:
 			print("Error: Connectivity")
 			t.sleep(60)
@@ -56,7 +56,14 @@ def commentsURL(post_id,responseSize): #Get the comments from the posts
 	return(urlBase + appendPostID + responseSize)
 
 def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
-	return(postsDataframe['created_utc'].min())
+	x = False
+	while x == False:
+		try:
+			result = postsDataframe['created_utc'].min()
+			x = True
+			return(result)
+		except:
+			t.sleep(10)
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	print afterTime,":", beforeTime
