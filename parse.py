@@ -15,8 +15,8 @@ length = 7 #in days
 afterTime = str(time - length*(24*60*60))
 endTime = 1252540800 #Unix Time for August 10, 2009 at 12:00AM, when the AMA subreddit was created
 responseSize = 1000
-postsFile = './posts.pk' #storage area for all of the posts
-commentsFile = './comments.pk' #storage area for all of the comments
+postsFile = pd.HDFStore('posts.h5') #storage area for all of the posts
+commentsFile = pd.HDFStore('comments.h5') #storage area for all of the comments
 
 def postsURL(subreddit, afterTime, beforeTime, responseSize): #Create the URL
 	urlBase = "https://api.pushshift.io/reddit/search/submission/"
@@ -43,12 +43,16 @@ def parsePosts(response): #set up the data in a Pandas Data Frame
 	return(pd.DataFrame(response['data']))
 
 def appendPosts(data,file): #saving the posts data frames
-	if os.path.exists(file):
-		OGFile = pd.read_pickle(file,compression=None)
-		newFile = OGFile.append(data)
-		newFile.to_pickle(file)
-	else:
-		data.to_pickle(file)
+	#It started here
+	file.append('d1',data,format="table",data_columns=True)
+	file.close()
+
+	#if os.path.exists(file):
+	#	OGFile = pd.read_pickle(file,compression=None)
+	#	newFile = OGFile.append(data)
+	#	newFile.HDFStore(file)
+	#else:
+	#	data.HDFStore(file)
 def commentsURL(post_id,responseSize): #Get the comments from the posts
 	urlBase = "https://api.pushshift.io/reddit/comment/search/"
 	appendPostID = "?link_id=" + post_id
@@ -59,10 +63,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	x = False
 	while x == False:
 		try:
-			result = postsDataframe['created_utc'].min()
-			print result
-			x = True
-			return(result)
+			return(postsDataframe['created_utc'].min())
 		except:
 			t.sleep(10)
 
@@ -90,7 +91,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		print(postID)
 
 	#10 get the new time
-	time = getNewUTC(pd.read_pickle('./comments.pk'))
+	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
 
