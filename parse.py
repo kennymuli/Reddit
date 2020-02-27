@@ -40,7 +40,7 @@ def curlCall(url): #Get the cURL response from a URL
 			t.sleep(60)
 
 def parsePosts(response): #set up the data in a Pandas Data Frame
-	return(pd.DataFrame(response['data']))
+	return(pd.DataFrame(response['data'], dtype=object).convert_objects())
 
 def appendPosts(data,file): #saving the posts data frames
 	#It started here
