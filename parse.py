@@ -18,6 +18,8 @@ endTime = 1252540800 #Unix Time for August 10, 2009 at 12:00AM, when the AMA sub
 responseSize = 1000
 postsFile = './posts.pk' #storage area for all of the posts
 commentsFile = './comments.pk' #storage area for all of the comments
+postsFileCount = 0 #appending file
+commentsFileCount = 0
 
 def postsURL(subreddit, afterTime, beforeTime, responseSize): #Create the URL
 	urlBase = "https://api.pushshift.io/reddit/search/submission/"
@@ -33,7 +35,7 @@ def curlCall(url): #Get the cURL response from a URL
 	x = False
 	while x == False:
 		try:
-			response = r.get(url)
+			response = r.get(url, timeout=10)
 			x = True
 			return(response.json())
 		except:
@@ -63,6 +65,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 			return(postsDataframe['created_utc'].min())
 		except Exception:
 			traceback.print_exc()
+			sleep(60)
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	print afterTime,":", beforeTime
@@ -84,12 +87,22 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		responseComments = curlCall(commentURL) #7 Get the URL, get the API response, and change it into JSON
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
-		t.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
+		t.sleep(0.4) #sleep so that we don't overload the API limitations of 200 requests per minute
 		print(postID)
 	#10 get the new time
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
+	commentsFileSize = os.path.getsize(commentsFile)
+	if commentsFileSize > 10000000:
+		commentsFile = './comments'+commentsFileCount+'.pk'
+		commentsFileCount += 1
+	postsFileSize = os.path.getsize(commentsFile)
+	if postsFileSize > 10000000:
+		postsFile = './comments'+postsFileCount+'.pk'
+		postsFileCount += 1
+
+
 
 #MEASUREMENT: TOtal no-OP responses vs total OP responses, for response rate (number of questions responded to)
 
