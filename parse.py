@@ -3,6 +3,7 @@ import datetime
 import requests as r
 import pandas as pd
 import os.path
+import traceback
 
 currentTime = datetime.datetime.now() #Get the current time
 unixtime = t.mktime(currentTime.timetuple()) #Convert current time to Unix format
@@ -60,8 +61,8 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 	while x == False:
 		try:
 			return(postsDataframe['created_utc'].min())
-		except:
-			t.sleep(10)
+		except Exception:
+    traceback.print_exc()
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	print afterTime,":", beforeTime
@@ -85,7 +86,6 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
 		t.sleep(0.35) #sleep so that we don't overload the API limitations of 200 requests per minute
 		print(postID)
-
 	#10 get the new time
 	time = getNewUTC(commentsDF)
 	beforeTime = str(time)
