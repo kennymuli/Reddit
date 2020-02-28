@@ -65,7 +65,7 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 			return(postsDataframe['created_utc'].min())
 		except Exception:
 			traceback.print_exc()
-			sleep(60)
+			t.sleep(60)
 
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
 	print afterTime,":", beforeTime
@@ -90,7 +90,7 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		t.sleep(0.4) #sleep so that we don't overload the API limitations of 200 requests per minute
 		print(postID)
 	#10 get the new time
-	time = getNewUTC(commentsDF)
+	time = getNewUTC(pd.read_pickle('./comments.pk'))
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
 	#commentsFileSize = os.path.getsize(commentsFile)
