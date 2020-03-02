@@ -9,12 +9,12 @@ currentTime = datetime.datetime.now() #Get the current time
 unixtime = t.mktime(currentTime.timetuple()) #Convert current time to Unix format
 
 #hardcode variables
-subreddit ="ama"
+subreddit = raw_input("Please enter the subreddit you'd like to collect posts and comments from: ")
 time = int(unixtime)
 beforeTime = str(time - 5*(24*60*60)) #start it 5 days prior so new posts aren't caught up
 length = 7 #in days
 afterTime = str(time - length*(24*60*60))
-endTime = 1252540800 #Unix Time for August 10, 2009 at 12:00AM, when the AMA subreddit was created
+endTime = int(raw_input('Please enter the UNIX TIME for when you would like the last dated post to be: ')  #Unix Time for August 10, 2009 at 12:00AM, when the AMA subreddit was created
 responseSize = 1000
 postsFile = './posts.pk' #storage area for all of the posts
 commentsFile = './comments.pk' #storage area for all of the comments
@@ -39,7 +39,6 @@ def curlCall(url): #Get the cURL response from a URL
 			x = True
 			return(response.json())
 		except:
-			print("Error: Connectivity")
 			t.sleep(60)
 
 def parsePosts(response): #set up the data in a Pandas Data Frame
@@ -67,8 +66,10 @@ def getNewUTC(postsDataframe): #Get the new UTC time for beforeTime in UTC
 			traceback.print_exc()
 			t.sleep(60)
 
+print("All data for comments will be saved in ./comments[x].pk, and all data for posts will be saved in ./posts[x].pk. New comments and posts files will be created periodically to reduce memory usage when the file writes to a pickle.")
+
 while int(afterTime) > endTime: #while there are still other posts to go through, keep going
-	print afterTime,":", beforeTime
+	print("Currently getting posts/comments from the " + subreddit + " Subreddit between dates" + datetime.utcfromtimestamp(int(afterTime)).strftime('%Y-%m-%d %H:%M:%S') " & " + datetime.utcfromtimestamp(int(beforeTime)).strftime('%Y-%m-%d %H:%M:%S'))
 	#1 run postURL to get the pushshift list of URLs
 	postURL = postsURL(subreddit,afterTime,beforeTime,responseSize)
 
@@ -88,7 +89,6 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 		commentsDF = parsePosts(responseComments) #8 Parse each API call into a dataframe
 		appendPosts(commentsDF,commentsFile) #9 add the comments df into the comments file
 		t.sleep(0.4) #sleep so that we don't overload the API limitations of 200 requests per minute
-		print(postID)
 	#10 get the new time
 	time = getNewUTC(pd.read_pickle('./comments.pk'))
 	beforeTime = str(time)
