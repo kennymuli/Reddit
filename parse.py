@@ -94,11 +94,11 @@ while int(afterTime) > endTime: #while there are still other posts to go through
 	beforeTime = str(time)
 	afterTime = str(time - length*(24*60*60)) #as long as afterTime > endTime, it will loop and continue again with new beforeTime and new afterTime
 	commentsFileSize = os.path.getsize(commentsFile)
-	if commentsFileSize > 50:
+	if commentsFileSize > 15000000:
 		commentsFile = './comments'+ str(commentsFileCount) +'.pk'
 		commentsFileCount += 1
 	postsFileSize = os.path.getsize(postsFile)
-	if postsFileSize > 50:
+	if postsFileSize > 15000000:
 		postsFile = './comments'+ str(postsFileCount) +'.pk'#
 		postsFileCount += 1
 
