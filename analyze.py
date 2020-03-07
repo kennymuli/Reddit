@@ -11,13 +11,6 @@ for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
 
 print len(fileList)
 
-for file in fileList:
-	df = pd.read_pickle(file)
-	dfgroups = df.groupby('link_id')
-	totalcomments = dfgroups['is_submitter'].count() #The total number of comments per post
-	responses = dfgroups['is_submitter'].sum() #The number of times OP responded in their post
-	comments = totalcomments - responses
-
 def totalComments(fileList): #Get the total amount of all comments collected
 	totalCount = 0
 	for file in fileList:
@@ -28,6 +21,15 @@ def totalComments(fileList): #Get the total amount of all comments collected
 
 totalCount = totalComments(fileList)
 print totalCount
+
+for file in fileList:
+	df = pd.read_pickle(file)
+	dfgroups = df.groupby('link_id')
+	totalComments = pd.dataframe.append(dfgroups['is_submitter'].count()) #The total number of comments per post
+	responses = dfgroups['is_submitter'].sum() #The number of times OP responded in their post
+	comments = totalcomments - responses #The total number of non-OP comments
+
+print totalComments
 
 #List of all columns in the content data frame
 #--------------
