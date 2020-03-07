@@ -25,16 +25,11 @@ print totalCount
 for file in fileList:
 	df = pd.read_pickle(file)
 	dfgroups = df.groupby('link_id')
-	if totalComments in globals():
-		totalComments = dfgroups['is_submitter'].count()
-		responses = dfgroups['us_submitter'].sum()
-		comments = totalcomments - responses
-	else:
-		totalComments = totalComments.append['is_submitter'].count()
-		responses = responses.append['us_submitter'].sum()
-		comments = totalcomments - responses
-
-print totalComments
+	totalComments = dfgroups['is_submitter'].count()
+	responses = dfgroups['us_submitter'].sum()
+	comments = totalcomments - responses
+	responseRatio = comments/responses
+	print responseRatio
 
 #List of all columns in the content data frame
 #--------------
