@@ -9,6 +9,8 @@ fileList = [] #the list where we will store the comments.pk files
 for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
 	fileList.append(file)
 
+print len(fileList)
+
 for file in fileList:
 	df = pd.read_pickle(file)
 	dfgroups = df.groupby('link_id')
