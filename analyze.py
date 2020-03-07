@@ -27,7 +27,7 @@ for file in fileList:
 	dfgroups = df.groupby('link_id')
 	totalComments = dfgroups['is_submitter'].count()
 	responses = dfgroups['is_submitter'].sum()
-	comments = totalcomments - responses
+	comments = totalComments - responses
 	responseRatio = comments/responses
 	print responseRatio
 
