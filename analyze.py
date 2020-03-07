@@ -3,16 +3,18 @@ import pandas as pd
 
 #Collect the Comments files in a list to parse
 commentsFile = "comments*" #the string that all comments.pk files contain
+columnGroup = 'link_id' #the column we will use to group all of the rows in the data frame
 fileList = [] #the list where we will store the comments.pk files
+
 for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
 	fileList.append(file)
 
-def iterator(file):
-	for row in file.itertuples():
-		#Get the content for each row
-
 for file in fileList:
-	content = pd.read_pickle(file)
+	df = pd.read_pickle(file)
+	dfgroups = df.groupby('link_id')
+	totalcomments = dfgroups['is_submitter'].count() #The total number of comments per post
+	responses = dfgroups['is_submitter'].sum() #The number of times OP responded in their post
+	comments = totalcomments - responses
 
 def totalComments(fileList): #Get the total amount of all comments collected
 	totalCount = 0
@@ -22,9 +24,12 @@ def totalComments(fileList): #Get the total amount of all comments collected
 		totalCount += count
 	return totalCount
 
+totalCount = totalComments(fileList)
+print totalCount
+
 #List of all columns in the content data frame
 #--------------
-#Columns to Use 
+#Columns to Use  	
 #--------------
 #body - what the person actually wrote
 #is_submitter - is the person commenting the person who submitted (OP)?
@@ -79,3 +84,8 @@ def totalComments(fileList): #Get the total amount of all comments collected
 #NLP - any particular types of questions that people who post respond to?
 #What's the upvoted questions that the author answers?
 #What qualifies as a good AMA vs a BS AMA?
+
+#Create a dictionary, do it by link_id:
+	#total non-OP comments
+	#total OP comments
+	#total comments
