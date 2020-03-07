@@ -25,7 +25,7 @@ print totalCount
 for file in fileList:
 	df = pd.read_pickle(file)
 	dfgroups = df.groupby('link_id')
-	totalComments = pd.dataframe.append(dfgroups['is_submitter'].count()) #The total number of comments per post
+	totalComments = pd.DataFrame.append(dfgroups['is_submitter'].count()) #The total number of comments per post
 	responses = dfgroups['is_submitter'].sum() #The number of times OP responded in their post
 	comments = totalcomments - responses #The total number of non-OP comments
 
