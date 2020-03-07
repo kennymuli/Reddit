@@ -5,8 +5,6 @@ import pandas as pd
 commentsFile = "comments*" #the string that all comments.pk files contain
 columnGroup = 'link_id' #the column we will use to group all of the rows in the data frame
 fileList = [] #the list where we will store the comments.pk files
-totalComments = pd.DataFrame()
-responses = pd.DataFrame()
 
 for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
 	fileList.append(file)
@@ -27,9 +25,14 @@ print totalCount
 for file in fileList:
 	df = pd.read_pickle(file)
 	dfgroups = df.groupby('link_id')
-	totalComments = totalComments.append(dfgroups['is_submitter'].count()) #The total number of comments per post
-	responses = responses.append(dfgroups['is_submitter'].sum()) #The number of times OP responded in their post
-	comments = totalcomments - responses #The total number of non-OP comments
+	if totalComments in globals():
+		totalComments = dfgroups['is_submitter'].count()
+		responses = dfgroups['us_submitter'].sum()
+		comments = totalcomments - responses
+	else:
+		totalComments = totalComments.append['is_submitter'].count()
+		responses = responses.append['us_submitter'].sum()
+		comments = totalcomments - responses
 
 print totalComments
 
