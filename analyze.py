@@ -1,39 +1,18 @@
 import glob as gb
 import pandas as pd 
 
-#Collect the Comments files in a list to parse
-commentsFile = "comments*" #the string that all comments.pk files contain
-columnGroup = 'link_id' #the column we will use to group all of the rows in the data frame
-fileList = [] #the list where we will store the comments.pk files
-analysis = pd.DataFrame(columns = ['totalComments','responses','comments','ratio'])
+df = pd.read_pickle('./allcomments.pk')
+records = df.groupby('link_id')
+#-------------
+#Basic Stats
+#-------------
+commentsTotal = records['is_submitter'].count()
+commentsOP = records['is_submitter'].sum()
+commentsOther = commentsTotal - commentsOP
+commentsRatio = commentsOther/commentsOP
 
-for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
-	fileList.append(file)
+print commentsTotal.idxmax(10)
 
-print len(fileList)
-
-def totalComments(fileList): #Get the total amount of all comments collected
-	totalCount = 0
-	for file in fileList:
-		df = pd.read_pickle(file)
-		count = len(df.index)
-		totalCount += count
-	return totalCount
-
-totalCount = totalComments(fileList)
-print totalCount
-
-for file in fileList:
-	df = pd.read_pickle(file)
-	dfgroups = df.groupby('link_id')
-	totalComments = dfgroups['is_submitter'].count()
-	responses = dfgroups['is_submitter'].sum()
-	comments = totalComments - responses
-	responseRatio = comments/responses
-	print totalComments
-	analysis.append({'totalComments':totalComments,'responses':responses,'comments':comments,'ratio':responseRatio}, ignore_index=True)
-
-print analysis
 #List of all columns in the content data frame
 #--------------
 #Columns to Use  	
