@@ -5,7 +5,7 @@ import pandas as pd
 commentsFile = "comments*" #the string that all comments.pk files contain
 columnGroup = 'link_id' #the column we will use to group all of the rows in the data frame
 fileList = [] #the list where we will store the comments.pk files
-analysis = pd.DataFrame(columns['totalComments','responses','comments','ratio'])
+analysis = pd.DataFrame(columns = ['totalComments','responses','comments','ratio'])
 
 for file in gb.glob(commentsFile): #compile a list of all the comments.pk files
 	fileList.append(file)
