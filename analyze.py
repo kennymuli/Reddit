@@ -30,8 +30,9 @@ for file in fileList:
 	responses = dfgroups['is_submitter'].sum()
 	comments = totalComments - responses
 	responseRatio = comments/responses
-	analysis.append({'totalComments':totalComments,'responses':responses,'comments':comments,'ratio':responseRatio})
+	analysis.append({'totalComments':totalComments,'responses':responses,'comments':comments,'ratio':responseRatio}, ignore_index=True)
 
+print analysis
 #List of all columns in the content data frame
 #--------------
 #Columns to Use  	
