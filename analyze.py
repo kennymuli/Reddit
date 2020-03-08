@@ -30,6 +30,7 @@ for file in fileList:
 	responses = dfgroups['is_submitter'].sum()
 	comments = totalComments - responses
 	responseRatio = comments/responses
+	print totalComments
 	analysis.append({'totalComments':totalComments,'responses':responses,'comments':comments,'ratio':responseRatio}, ignore_index=True)
 
 print analysis
